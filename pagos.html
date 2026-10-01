@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagos | Nexus Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+   
+   
+</head>
+<body>
+    <div class="container">
+        <div class="view active">
+            <div class="header">
+                <div class="admin-badge">
+                    <div class="admin-avatar" id="admin-initials">AD</div>
+                    <div>
+                        <h4 style="font-size: 1.1rem; font-weight: 700;" id="admin-name">Administrador</h4>
+                        <span style="font-size: 0.8rem; color: var(--success);"><i class="fas fa-circle" style="font-size: 6px;"></i> Sesión Activa</span>
+                    </div>
+                </div>
+                <button class="btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+            </div>
+
+            <div class="tabs">
+                <a href="../deportes.html" class="tab-btn"><i class="fas fa-futbol"></i> Deportes</a>
+                <a href="../entrenadores.html" class="tab-btn"><i class="fas fa-user-tie"></i> Entrenadores</a>
+                <a href="../asignaciones.html" class="tab-btn"><i class="fas fa-link"></i> Asignaciones</a>
+                <a href="../atletas.html" class="tab-btn"><i class="fas fa-users"></i> Atletas</a>
+                <a href="../pagos.html" class="tab-btn active"><i class="fas fa-cash-register"></i> Pagos</a>
+            </div>
+
+            <div class="card">
+                <h4 style="margin-bottom: 20px; font-weight: 700;"><i class="fas fa-wallet text-primary"></i> Registro de Pagos Deportivos</h4>
+                <input type="hidden" id="pago-id-hidden">
+                <div class="form-group">
+                    <label for="pago-monto">Monto ($):</label>
+                    <input type="number" step="0.01" min="0" id="pago-monto" placeholder="Ej. 50.00" required>
+                </div>
+                <div class="form-group">
+                    <label for="pago-metodo">Método de Pago:</label>
+                    <select id="pago-metodo" required>
+                        <option value="">-- Seleccione método --</option>
+                        <option value="Transferencia">Transferencia</option>
+                        <option value="Tarjeta">Tarjeta</option>
+                        <option value="Efectivo">Efectivo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="pago-fecha">Fecha:</label>
+                    <input type="date" id="pago-fecha" required>
+                </div>
+                <div class="form-group">
+                    <label for="select-atleta-pago">Atleta:</label>
+                    <select id="select-atleta-pago" onchange="onAtletaPagoSelected(this.value)" required>
+                        <option value="">-- Seleccione un atleta --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Deportes del Atleta:</label>
+                    <div id="pago-deportes-container">
+                        <span style="color: var(--text-muted); font-size: 0.85rem;">Seleccione un atleta primero...</span>
+                    </div>
+                </div>
+                <button id="btn-save-pago" onclick="guardarPago()">Guardar Pago</button>
+            </div>
+
+            <div class="table-container">
+                <h4 style="margin-bottom: 15px; font-weight: 700;">Historial de Pagos</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Monto</th>
+                            <th>Método</th>
+                            <th>Fecha</th>
+                            <th>Atleta</th>
+                            <th>Deportes</th>
+                            <th>Historial / Pagos Anteriores</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-pagos-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script/libreria compartida.js"></script>  
+    <script type="module" src="../script/db.js"></script>
+    <script src="script/pagos.js"></script> 
+      
+</body>
+</html>
+            

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atletas | Nexus Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    
+</head>
+<body>
+    <div class="container">
+        <div class="view active">
+            <div class="header">
+                <div class="admin-badge">
+                    <div class="admin-avatar" id="admin-initials">AD</div>
+                    <div>
+                        <h4 style="font-size: 1.1rem; font-weight: 700;" id="admin-name">Administrador</h4>
+                        <span style="font-size: 0.8rem; color: var(--success);"><i class="fas fa-circle" style="font-size: 6px;"></i> Sesión Activa</span>
+                    </div>
+                </div>
+                <button class="btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+            </div>
+
+            <div class="tabs">
+                <a href="../deportes.html" class="tab-btn"><i class="fas fa-futbol"></i> Deportes</a>
+                <a href="../entrenadores.html" class="tab-btn"><i class="fas fa-user-tie"></i> Entrenadores</a>
+                <a href="../asignaciones.html" class="tab-btn"><i class="fas fa-link"></i> Asignaciones</a>
+                <a href="../atletas.html" class="tab-btn active"><i class="fas fa-users"></i> Atletas</a>
+                <a href="../pagos.html" class="tab-btn"><i class="fas fa-cash-register"></i> Pagos</a>
+            </div>
+
+            <div class="card">
+                <h4 style="margin-bottom: 20px; font-weight: 700;"><i class="fas fa-user-graduate text-primary"></i> Registrar Atleta</h4>
+                <input type="hidden" id="atleta-id-hidden">
+                <div class="form-group">
+                    <label for="atleta-cedula">Cédula (Numérico):</label>
+                    <input type="number" id="atleta-cedula" placeholder="Ej. 12345678" required>
+                </div>
+                <div class="form-group">
+                    <label for="atleta-nombre">Nombre:</label>
+                    <input type="text" id="atleta-nombre" placeholder="Nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="atleta-apellido">Apellido:</label>
+                    <input type="text" id="atleta-apellido" placeholder="Apellido" required>
+                </div>
+                <div class="form-group">
+                    <label for="atleta-telefono">Teléfono (Numérico):</label>
+                    <input type="number" id="atleta-telefono" placeholder="Ej. 70000000" required>
+                </div>
+                <div class="form-group">
+                    
+                    <div class="checkbox-group-container" id="contenedor-deportes">
+                        <label style="font-size: 0.8rem; margin-bottom: 8px;">Seleccione uno o más Deportes del Atleta :</label>
+                        <div class="checkbox-group" id="atleta-deportes-checkbox-container"></div>
+                    </div>
+                </div>
+                <button id="btn-save-atleta" onclick="guardarAtleta()">Guardar Atleta</button>
+            </div>
+
+            <div class="table-container">
+                <h4 style="margin-bottom: 15px; font-weight: 700;">Atletas Registrados</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cédula</th>
+                            <th>Nombre & Apellido</th>
+                            <th>Teléfono</th>
+                            <th>Deportes</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-atletas-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+     <script src="script/libreria compartida.js"></script>  
+    <script type="module" src="../script/db.js"></script>
+  <script src="script/atletas.js"></script>  
+
+</body>
+</html>

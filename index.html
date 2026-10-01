@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Pro | Gestión Deportiva Premium</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    
+</head>
+<body>
+    <div class="container">
+        <div id="login-view" class="view active">
+            <div class="login-logo">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <h2>Acceso Administrativo</h2>
+            <p>Ingrese sus credenciales para acceder al sistema</p>
+            <form id="login-form">
+                <input type="text" id="admin-nombre" placeholder="Nombre" required>
+                <input type="text" id="admin-apellido" placeholder="Apellido" required>
+                <button type="submit">Iniciar Sesión </button>
+              
+
+             
+            </form>
+        </div>
+    </div>
+    <script>
+        document.getElementById('login-form').onsubmit = (e) => {
+            e.preventDefault();
+            const nom = document.getElementById('admin-nombre').value.trim();
+            const ape = document.getElementById('admin-apellido').value.trim();
+            if(nom && ape) {
+                const fullName = `${nom} ${ape}`;
+                
+                //evitar guardar otro usuario
+                const userAux = localStorage.getItem('apex_admin');
+                if( userAux == null || userAux == undefined)
+                {                             
+                    localStorage.setItem('apex_admin', fullName);                  
+                }
+
+                if(fullName ===userAux ){                    
+                    window.location.href = "deportes.html"; 
+                }               
+            }
+        };
+    </script>
+</body>
+</html>

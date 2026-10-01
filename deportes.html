@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+ 
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deportes | Nexus Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    
+</head>
+<body>
+    <div class="container">
+        <div class="view active">
+            <div class="header">
+                <div class="admin-badge">
+                    <div class="admin-avatar" id="admin-initials">AD</div>
+                    <div>
+                        <h4 style="font-size: 1.1rem; font-weight: 700;" id="admin-name">Administrador</h4>
+                        <span style="font-size: 0.8rem; color: var(--success);"><i class="fas fa-circle" style="font-size: 6px;"></i> Sesión Activa</span>
+                    </div>
+                </div>
+                <button class="btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+            </div>
+
+            <div class="tabs">
+                <a href="../deportes.html" class="tab-btn active"><i class="fas fa-futbol"></i> Deportes</a>
+                <a href="../entrenadores.html" class="tab-btn"><i class="fas fa-user-tie"></i> Entrenadores</a>
+                <a href="../asignaciones.html" class="tab-btn"><i class="fas fa-link"></i> Asignaciones</a>
+                <a href="../atletas.html" class="tab-btn"><i class="fas fa-users"></i> Atletas</a>
+                <a href="../pagos.html" class="tab-btn"><i class="fas fa-cash-register"></i> Pagos</a>
+            </div>
+
+            <div class="card">
+                <h4 style="margin-bottom: 20px; font-weight: 700; display: flex; align-items: center; gap: 10px;"><i class="fas fa-plus-circle text-primary"></i> Registrar Deporte</h4>
+                <input type="hidden" id="deporte-id">
+                
+                <!-- TUS DIBUJOS EXACTOS -->
+                <div class="form-group">
+                    <label>Seleccionar Icono / Plantilla:</label>
+                    <div class="sports-grid" id="sports-options">
+                        <div class="sport-card" id="card-futbol" onclick="selectPresetSport('Fútbol', 'Entrenamiento táctico y físico en cancha de césped.')">
+                            <i class="fas fa-futbol"></i><span>Fútbol</span>
+                        </div>
+                        <div class="sport-card" id="card-basket" onclick="selectPresetSport('Básquet', 'Práctica de lanzamientos, drible y resistencia.')">
+                            <i class="fas fa-basketball-ball"></i><span>Básquet</span>
+                        </div>
+                        <div class="sport-card" id="card-natacion" onclick="selectPresetSport('Natación', 'Clases técnicas de estilos en piscina semi-olímpica.')">
+                            <i class="fas fa-swimmer"></i><span>Natación</span>
+                        </div>
+                        <div class="sport-card" id="card-gym" onclick="selectPresetSport('Gimnasio', 'Musculación, acondicionamiento y pesas libres.')">
+                            <i class="fas fa-dumbbell"></i><span>Gimnasio</span>
+                        </div>
+                    </div>
+                </div>
+  
+                <div class="form-group">
+                    <label for="nombre-deporte">Nombre del Deporte:</label>
+                    <input type="text" id="nombre-deporte" placeholder="Ej. Tenis, Pádel..." required oninput="handleManualSportInput()">
+                </div>
+                <div class="form-group">
+                    <label for="monto-deporte">Monto de Mensualidad ($):</label>
+                    <input type="number" id="monto-deporte" step="0.01" min="0" placeholder="Ej. 30.00" required>
+                </div>
+                <div class="form-group">
+                    <label for="descripcion-deporte">Descripción:</label>
+                    <textarea id="descripcion-deporte" rows="3" placeholder="Detalles de la disciplina..." required></textarea>
+                </div>
+            <div>
+                    <button id="btn-save-deporte" type="submit" onclick="guardardeporte()">Guardar deporte</button>
+            </div>
+
+            <div class="table-container">
+                <h4 style="margin-bottom: 15px; font-weight: 700;">Deportes Registrados</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Deporte</th>
+                            <th>Monto</th>
+                            <th>Descripción</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-deportes-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+ <script src="script/libreria compartida.js"></script> 
+ <script type="module" src="../script/db.js"></script>
+ <script src= "script/deportes.js"></script>
+  
+</html>
+  

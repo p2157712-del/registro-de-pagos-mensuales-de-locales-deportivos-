@@ -1,0 +1,224 @@
+:root {
+    --primary: #69f157;
+    --primary-hover: #4feb4f;
+    --primary-light: rgba(105, 241, 87, 0.15);
+    --secondary: #0a140d;
+    --accent: #10b981;
+    --success: #34d399;
+    --danger: #ef4444;
+    --bg: #050b07;
+    --card-bg: rgba(15, 28, 20, 0.75);
+    --border: rgba(105, 241, 87, 0.2);
+    --text-main: #f0fdf4;
+    --text-muted: #739681;
+    --radius: 16px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+body { 
+    background: var(--bg); 
+    color: var(--text-main); 
+    min-height: 100vh; 
+    display: flex; 
+    justify-content: center; 
+    align-items: flex-start; 
+    padding: 40px 20px;
+    background-image: radial-gradient(at 0% 0%, rgba(105, 241, 87, 0.12) 0px, transparent 50%),
+                      radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.08) 0px, transparent 50%);
+    background-attachment: fixed;
+}
+
+.container { width: 100%; max-width: 1250px; }
+
+.view { 
+    display: none; 
+    background: var(--card-bg); 
+    backdrop-filter: blur(20px); 
+    border: 1px solid var(--border);
+    border-radius: var(--radius); 
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 30px rgba(105, 241, 87, 0.05); 
+    padding: 40px; 
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+.view.active { display: block; }
+
+@keyframes fadeIn { 
+    from { opacity: 0; transform: translateY(10px); } 
+    to { opacity: 1; transform: translateY(0); } 
+}
+
+#login-view { max-width: 440px; margin: 10vh auto; text-align: center; }
+
+.login-logo { 
+    width: 70px; 
+    height: 70px; 
+    background: linear-gradient(135deg, var(--primary), var(--accent)); 
+    border-radius: 20px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    margin: 0 auto 24px; 
+    box-shadow: 0 10px 25px rgba(105, 241, 87, 0.3); 
+}
+
+.login-logo i { font-size: 2rem; color: #050b07; }
+
+#login-view h2 { font-size: 1.75rem; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.025em; color: var(--text-main); }
+#login-view p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 30px; }
+
+input, textarea, select { 
+    width: 100%; 
+    padding: 14px 16px; 
+    margin: 8px 0 16px 0; 
+    background: rgba(10, 20, 13, 0.6); 
+    border: 1px solid var(--border); 
+    border-radius: 12px; 
+    font-size: 0.95rem; 
+    color: var(--text-main); 
+    transition: var(--transition); 
+}
+
+input:focus, textarea:focus, select:focus { 
+    border-color: var(--primary); 
+    background: rgba(10, 20, 13, 0.9); 
+    box-shadow: 0 0 0 4px var(--primary-light); 
+    outline: none; 
+}
+
+input::placeholder, textarea::placeholder { color: #496352; }
+select option { background: var(--secondary); color: var(--text-main); }
+
+button { 
+    background: linear-gradient(135deg, var(--primary), var(--accent)); 
+    color: #050b07; 
+    border: none; 
+    padding: 14px 24px; 
+    border-radius: 12px; 
+    cursor: pointer; 
+    font-weight: 700; 
+    font-size: 0.95rem; 
+    width: 100%; 
+    transition: var(--transition); 
+    box-shadow: 0 4px 12px rgba(105, 241, 87, 0.25); 
+}
+
+button:hover { 
+    transform: translateY(-2px); 
+    box-shadow: 0 6px 20px rgba(105, 241, 87, 0.4); 
+    background: linear-gradient(135deg, var(--primary-hover), var(--primary)); 
+}
+
+.header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 24px; margin-bottom: 24px; }
+.admin-badge { display: flex; align-items: center; gap: 12px; }
+
+.admin-avatar { 
+    width: 44px; 
+    height: 44px; 
+    background: var(--primary-light); 
+    border: 1px solid var(--primary); 
+    border-radius: 50%; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    color: var(--primary); 
+    font-weight: bold; 
+}
+
+.btn-logout { 
+    background: rgba(239, 68, 68, 0.1); 
+    color: var(--danger); 
+    border: 1px solid rgba(239, 68, 68, 0.2); 
+    width: auto; 
+    font-size: 0.85rem; 
+    padding: 10px 18px; 
+    box-shadow: none; 
+}
+
+.btn-logout:hover { 
+    background: var(--danger); 
+    color: white; 
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); 
+}
+
+.tabs { display: flex; gap: 8px; margin-bottom: 30px; border-bottom: 1px solid var(--border); padding-bottom: 12px; overflow-x: auto; }
+
+.tab-btn { 
+    text-decoration: none; 
+    display: inline-block; 
+    background: transparent; 
+    color: var(--text-muted); 
+    border: 1px solid transparent; 
+    padding: 10px 18px; 
+    border-radius: 10px; 
+    cursor: pointer; 
+    font-weight: 600; 
+    font-size: 0.9rem; 
+    width: auto; 
+    transition: var(--transition); 
+    white-space: nowrap; 
+    box-shadow: none; 
+}
+
+.tab-btn:hover { color: var(--text-main); background: rgba(105, 241, 87, 0.05); transform: none; box-shadow: none; }
+.tab-btn.active { background: var(--primary-light); color: var(--primary); border-color: rgba(105, 241, 87, 0.3); box-shadow: none; }
+
+.card { background: rgba(10, 20, 13, 0.5); border: 1px solid var(--border); border-radius: var(--radius); padding: 25px; margin-bottom: 25px; }
+
+.sports-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+
+.sport-card { 
+    background: rgba(10, 20, 13, 0.6); 
+    border: 1px solid var(--border); 
+    border-radius: 12px; 
+    padding: 14px 8px; 
+    text-align: center; 
+    cursor: pointer; 
+    transition: var(--transition); 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    gap: 8px; 
+}
+
+.sport-card i { font-size: 1.5rem; color: var(--text-muted); transition: var(--transition); }
+.sport-card span { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); }
+
+.sport-card:hover { border-color: var(--primary); background: rgba(105, 241, 87, 0.05); }
+.sport-card:hover i, .sport-card:hover span { color: var(--primary); }
+
+.sport-card.selected { border-color: var(--primary); background: var(--primary-light); box-shadow: 0 0 15px rgba(105, 241, 87, 0.2); }
+.sport-card.selected i, .sport-card.selected span { color: var(--primary); }
+
+.form-group { margin-bottom: 18px; text-align: left; }
+label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+
+.checkbox-group-container { display: none; margin-top: 10px; }
+.checkbox-group { max-height: 180px; overflow-y: auto; border: 1px solid var(--border); border-radius: 12px; padding: 12px; background: rgba(10, 20, 13, 0.6); }
+.checkbox-item { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; font-size: 0.95rem; cursor: pointer; color: var(--text-main); }
+.checkbox-item input { width: 18px; height: 18px; accent-color: var(--primary); margin: 0; cursor: pointer; }
+
+.table-container { margin-top: 20px; overflow-x: auto; background: rgba(10, 20, 13, 0.6); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+table { width: 100%; border-collapse: collapse; text-align: left; }
+th, td { padding: 14px 16px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+th { background: rgba(5, 11, 7, 0.8); color: var(--text-muted); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; font-weight: 700; }
+tr:hover td { background: rgba(105, 241, 87, 0.02); }
+/* Ajuste para los botones de acción dentro de las tablas */
+td button {
+    width: auto;             /* Quita el ancho del 100% */
+    padding: 8px 14px;       /* Reduce el tamaño interior del botón */
+    font-size: 0.9rem;       /* Reduce ligeramente el tamaño del ícono */
+    margin: 4px 4px 4px 0;   /* Añade separación entre los botones */
+    border-radius: 8px;      /* Esquinas un poco más sutiles */
+    display: inline-flex;    /* Permite que se coloquen uno al lado del otro */
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(105, 241, 87, 0.15); /* Sombra proporcional al tamaño */
+}
+
+/* Opcional: Para evitar que la celda de acciones se colapse extrañamente */
+td:last-child {
+    white-space: nowrap;     /* Mantiene los botones en la misma línea si hay espacio */
+}
