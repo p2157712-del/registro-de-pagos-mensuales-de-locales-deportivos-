@@ -222,3 +222,36 @@ td button {
 td:last-child {
     white-space: nowrap;     /* Mantiene los botones en la misma línea si hay espacio */
 }
+/* --- ESTILO ESPECIAL SOLO PARA CELULARES --- */
+@media (max-width: 768px) {
+    
+    /* 1. Hace que la caja verde ocupe el ancho del celular */
+    .container, [class*="contenedor"], form { 
+        width: 92% !important;
+        max-width: 100% !important;
+        margin: 10px auto !important;
+        padding: 15px !important;
+    }
+
+    /* 2. Hace que los cuadros de texto (Monto, Fecha) y selectores no se corten */
+    input, select, textarea {
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 3. Acomoda la parte de arriba (Usuario y Cerrar Sesión) uno abajo del otro */
+    .header, header, [class*="perfil"], [class*="usuario"] {
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        gap: 15px !important;
+    }
+
+    /* 4. Ajusta los botones de Deportes y Entrenadores para que quepan bien */
+    .navigation, nav, [class*="menu"] {
+        flex-direction: row !important;
+        justify-content: center !important;
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+    }
+}
