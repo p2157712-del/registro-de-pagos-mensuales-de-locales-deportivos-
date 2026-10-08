@@ -255,3 +255,72 @@ td:last-child {
         gap: 10px !important;
     }
 }
+/* ==========================================
+   CÓDIGO PARA ADAPTAR LA PÁGINA AL CELULAR 
+   ========================================== */
+
+/* Asegura que el contenedor principal no desborde la pantalla */
+body, html, .container {
+    width: 100%;
+    max-width: 100vw;
+    margin: 0;
+    padding: 10px;
+    box-sizing: border-box; /* Evita que los márgenes internos agranden la pantalla */
+    overflow-x: hidden;     /* Elimina el molesto scroll horizontal */
+}
+
+/* Hace que las cajas de login, formularios e inputs se ajusten de forma ordenada */
+#login-view, .login-logo, input, select, button {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Reglas especiales que se activan solo al abrir la página desde un celular */
+@media (max-width: 768px) {
+    /* Si tienes tablas de pagos o datos, esto les crea un deslizamiento interno para que no rompan el diseño */
+    table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    
+    /* Achica un poco las fuentes para que quepan mejor en pantallas pequeñas */
+    h2 {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+    
+    p {
+        font-size: 14px;
+        text-align: center;
+    }
+}
+/* Asegura que el contenedor principal no desborde la pantalla */
+body, main, .container {
+    width: 100%;
+    max-width: 100vw;
+    padding: 10px;
+    box-sizing: border-box; /* Clave para que los paddings no sumen tamaño extra */
+    overflow-x: hidden; /* Evita el scroll horizontal molesto */
+}
+
+/* Hace que los formularios ocupen todo el ancho disponible en celular */
+form, input, select, button {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Hace que las tablas tengan scroll interno propio si son muy anchas */
+.contenedor-tabla {
+    width: 100%;
+    overflow-x: auto; /* Permite deslizar la tabla sin romper el resto de la página */
+    -webkit-overflow-scrolling: touch;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
