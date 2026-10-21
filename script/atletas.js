@@ -133,39 +133,7 @@ const record = { id: editId ? parseInt(editId) : Date.now(), cedula, nombre, ape
 
         mostrarListadeDeportes();
         mostrarAtletas();
-        // ====== CÓDIGO AUMENTADO: Recuperar atletas en un dispositivo nuevo ======
-async function cargarAtletasDesdeFirebase() {
-    if (!window.firebaseQuery || usuarioActivo === "Invitado") return;
-    
-    try {
-        console.log("Buscando atletas en la nube para:", usuarioActivo);
-        const q = window.firebaseQuery(
-            window.firebaseCollection(window.firebaseDB, "atletas"),
-            window.firebaseWhere("usuarioOwner", "==", usuarioActivo)
-        );
-        
-        const querySnapshot = await window.firebaseGetDocs(q);
-        const atletasNube = [];
-        
-        querySnapshot.forEach((doc) => {
-            atletasNube.push(doc.data());
-        });
 
-        if (atletasNube.length > 0) {
-            dbAtletas = atletasNube;
-            localStorage.setItem('apex_atletas', JSON.stringify(dbAtletas));
-            mostrarAtletas();
-            console.log("✅ Atletas del dispositivo anterior recuperados con éxito.");
-        }
-    } catch (error) {
-        console.error("❌ Error al traer atletas desde Firebase:", error);
-    }
-}
-
-// Le damos 1.5 segundos a Firebase para conectarse de forma global antes de descargar los registros
-setTimeout(() => {
-    cargarAtletasDesdeFirebase();
-}, 1500);
 // ====== CÓDIGO NUEVO: Mostrar el usuario conectado y sus iniciales ======
 function actualizarInterfazUsuario() {
     const txtNombre = document.getElementById('admin-name');
