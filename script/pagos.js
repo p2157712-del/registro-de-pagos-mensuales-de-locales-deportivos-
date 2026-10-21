@@ -188,39 +188,6 @@ const record = { id: editId ? parseInt(editId) : Date.now(), monto, metodo, fech
 
         actualizarPagoAtletasSelector();
         mostrarPagos();
- //  Recuperar transacciones en un dispositivo nuevo 
-async function cargarPagosDesdeFirebase() {
-    if (!window.firebaseQuery || usuarioActivo === "Invitado") return;
-    
-    try {
-        console.log("Buscando historial de pagos en la nube para:", usuarioActivo);
-        const q = window.firebaseQuery(
-            window.firebaseCollection(window.firebaseDB, "pagos"),
-            window.firebaseWhere("usuarioOwner", "==", usuarioActivo)
-        );
-        
-        const querySnapshot = await window.firebaseGetDocs(q);
-        const pagosNube = [];
-        
-        querySnapshot.forEach((doc) => {
-            pagosNube.push(doc.data());
-        });
-
-        if (pagosNube.length > 0) {
-            dbPagos = pagosNube;
-            localStorage.setItem('apex_pagos', JSON.stringify(dbPagos));
-            mostrarPagos();
-            console.log("✅ Pagos históricos del dispositivo anterior recuperados.");
-        }
-    } catch (error) {
-        console.error("❌ Error al descargar transacciones desde Firebase:", error);
-    }
-}
-
-// Retardo estratégico de 1.5 segundos para la sincronización inicial de la red
-setTimeout(() => {
-    cargarPagosDesdeFirebase();
-}, 1500);
 
 // ====== CÓDIGO NUEVO: Mostrar el usuario conectado y sus iniciales ======
 function actualizarInterfazUsuario() {
