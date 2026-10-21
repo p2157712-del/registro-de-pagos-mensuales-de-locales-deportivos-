@@ -71,6 +71,38 @@
             }
         }
     };
+      document.getElementById('login-form').onsubmit = async (e) => {
+    e.preventDefault();
+    
+    // =========================================================================
+    // === CÓDIGO AUMENTADO: CONTROL DE ENTRADA ESTRICTO PARA UN SOLO USUARIO ===
+    const inputNombreVal = document.getElementById('admin-nombre').value.trim().toLowerCase();
+    const inputApellidoVal = document.getElementById('admin-apellido').value.trim().toLowerCase();
+    
+    // Aquí defines de forma estricta las únicas credenciales permitidas en este dispositivo
+    const USUARIO_VALIDO = "sq";
+    const APELLIDO_VALIDO = "sqqs";
+    
+    if (inputNombreVal !== USUARIO_VALIDO || inputApellidoVal !== APELLIDO_VALIDO) {
+        alert("❌ Acceso Denegado: Este dispositivo está protegido. No tienes permisos para registrar o ingresar un usuario diferente.");
+        
+        // Limpiamos los inputs para obligarlo a reintentar
+        document.getElementById('admin-nombre').value = "";
+        document.getElementById('admin-apellido').value = "";
+        return; // Detiene el código por completo y NO lo deja pasar a Firebase ni a deportes.html
+    }
+    // === FIN DEL CÓDIGO AUMENTADO ============================================
+    // =========================================================================
+
+    // AQUÍ CONTINÚA TU CÓDIGO ORIGINAL SIN BORRAR NADA:
+    const nom = document.getElementById('admin-nombre').value.trim();
+    const ape = document.getElementById('admin-apellido').value.trim();
+    
+    if (nom && ape) {
+        const fullName = `${nom} ${ape}`;
+        localStorage.setItem('apex_admin', fullName);
+        // ... (el resto de tu código de Firebase sigue igual aquí abajo)
+     
 </script>
 
     
