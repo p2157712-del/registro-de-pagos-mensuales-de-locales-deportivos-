@@ -21,10 +21,11 @@
                         <span style="font-size: 0.8rem; color: var(--success);"><i class="fas fa-circle" style="font-size: 6px;"></i> Sesión Activa</span>
                     </div>
                 </div>
-              <button class="btn-logout" onclick="window.location.href='index.html'"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+                <button class="btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
             </div>
 
             <div class="tabs">
+                
                 <a href="deportes.html" class="tab-btn active"><i class="fas fa-futbol"></i> Deportes</a>
                 <a href="entrenadores.html" class="tab-btn"><i class="fas fa-user-tie"></i> Entrenadores</a>
                 <a href="asignaciones.html" class="tab-btn"><i class="fas fa-link"></i> Asignaciones</a>
@@ -90,6 +91,38 @@
  <script src="script/libreria compartida.js"></script> 
  <script type="module" src="script/db.js"></script>
  <script src= "script/deportes.js"></script>
-  
+   <script>
+    // ====== CÓDIGO AUMENTADO PARA RECONOCER AL USUARIO EN CUALQUIER DISPOSITIVO ======
+    document.addEventListener("DOMContentLoaded", () => {
+        // Obtenemos el nombre del usuario que guardamos al iniciar sesión en el index.html
+        const usuarioActivo = localStorage.getItem('apex_admin');
+        
+        if (usuarioActivo) {
+            // Reemplaza el texto genérico "Administrador" por tu Nombre y Apellido reales
+            const nameElement = document.getElementById('admin-name');
+            if (nameElement) {
+                nameElement.innerText = usuarioActivo;
+            }
+            
+            // Genera las iniciales automáticas basadas en tu nombre y apellido (Ej: Juan Pérez -> JP)
+            const initialsElement = document.getElementById('admin-initials');
+            if (initialsElement) {
+                const partes = usuarioActivo.split(" ");
+                const iniciales = partes.map(p => p.charAt(0).toUpperCase()).slice(0, 2).join("");
+                initialsElement.innerText = iniciales;
+            }
+        } else {
+            // Si alguien intenta entrar directamente sin poner su nombre, lo regresa al login
+            window.location.href = "index.html";
+        }
+    });
+
+    // Función segura para cerrar sesión eliminando la llave del navegador actual
+    function logout() {
+        localStorage.removeItem('apex_admin');
+        window.location.href = "index.html";
+    }
+ </script>
+
 </html>
   
