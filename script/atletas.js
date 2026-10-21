@@ -165,3 +165,42 @@ function actualizarInterfazUsuario() {
 
 // Ejecuta la función al cargar el script
 actualizarInterfazUsuario();
+// ====== CÓDIGO AUMENTADO: Forzar el envío y lectura de usuarioOwner para ATLETAS ======
+async function purificarYSubirAtletasAFirebase(registroAtleta) {
+    if (!window.firebaseAddDoc || !window.firebaseCollection || !window.firebaseDB) return;
+    try {
+        const documentoLimpio = {
+            id: Number(registroAtleta.id),
+            nombre: String(registroAtleta.nombre || "").trim(),
+            apellido: String(registroAtleta.apellido || "").trim(),
+            // Agrega aquí abajo los campos específicos que tenga tu formulario de atletas si son diferentes
+            telefono: String(registroAtleta.telefono || "").trim(), 
+            usuarioOwner: String(usuarioActivo || "sq sqqs").trim() // Vincula al usuario activo
+        };
+
+        await window.firebaseAddDoc(
+            window.firebaseCollection(window.firebaseDB, "atletas"),
+            documentoLimpio
+        );
+        console.log("▲ Código Aumentado: Atleta sincronizado con usuarioOwner:", documentoLimpio.usuarioOwner);
+    } catch (error) {
+        console.error("▲ Error en la subida aumentada de atletas:", error);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    // IMPORTANTE: Verifica que el ID de tu botón de atletas sea id="btn-save-atleta" o cámbialo por el tuyo
+    const btnGuardarAtleta = document.getElementById('btn-save-atleta') || document.querySelector('.card button');
+    if (btnGuardarAtleta) {
+        btnGuardarAtleta.addEventListener('click', () => {
+            setTimeout(() => {
+                // Cambia 'apex_atletas' por la clave exacta que uses en tu localStorage de atletas
+                let listadoActual = JSON.parse(localStorage.getItem('apex_atletas')) || [];
+                if (listadoActual.length > 0) {
+                    const ultimoRegistro = listadoActual[listadoActual.length - 1];
+                    purificarYSubirAtletasAFirebase(ultimoRegistro);
+                }
+            }, 1200);
+        });
+    }
+});
