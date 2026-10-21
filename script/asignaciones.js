@@ -1,8 +1,9 @@
-  
 
         let dbEntrenadores = JSON.parse(localStorage.getItem('apex_entrenadores')) || [];
         let dbAsignaciones = JSON.parse(localStorage.getItem('apex_asignaciones')) || [];
-        
+        //  Identificar al administrador conectado 
+const usuarioActivo = localStorage.getItem('apex_admin') || "Invitado";
+
         const variosDeportesFijos = [ ];
         
         
@@ -48,7 +49,9 @@
             window.guardarAsignacion = guardarAsignacion
             if(!entrenadorId || deportes.length === 0) return alert("Seleccione entrenador y al menos un deporte.");
 
-            const record = { id: editId ? parseInt(editId) : Date.now(), entrenadorId: parseInt(entrenadorId), deportes };
+           // IDENTIFICADOR 
+           const record = { id: editId ? parseInt(editId) : Date.now(), entrenadorId: parseInt(entrenadorId), deportes, usuarioOwner: usuarioActivo };
+
             if(editId) {
                 dbAsignaciones = dbAsignaciones.map(i => i.id === record.id ? record : i);
                 document.getElementById('asignacion-id').value = "";
@@ -130,3 +133,36 @@
 mostrarAsignaciones();
 window.eliminarAsignacion = eliminarAsignacion;
 window.editarAsignacion = editarAsignacion;
+// ====== CÓDIGO AUMENTADO: Recuperar asignaciones en un dispositivo nuevo ======
+async function cargarAsignacionesDesdeFirebase() {
+    if (!window.firebaseQuery || usuarioActivo === "Invitado") return;
+    
+    try {
+        console.log("Buscando asignaciones en la nube para:", usuarioActivo);
+        const q = window.firebaseQuery(
+            window.firebaseCollection(window.firebaseDB, "asignaciones"),
+            window.firebaseWhere("usuarioOwner", "==", usuarioActivo)
+        );
+        
+        const querySnapshot = await window.firebaseGetDocs(q);
+        const asignacionesNube = [];
+        
+        querySnapshot.forEach((doc) => {
+            asignacionesNube.push(doc.data());
+        });
+
+        if (asignacionesNube.length > 0) {
+            dbAsignaciones = asignacionesNube;
+            localStorage.setItem('apex_asignaciones', JSON.stringify(dbAsignaciones));
+            mostrarAsignaciones();
+            console.log("✅ Asignaciones del dispositivo anterior recuperadas con éxito.");
+        }
+    } catch (error) {
+        console.error("❌ Error al descargar asignaciones desde Firebase:", error);
+    }
+}
+
+// Retardo de seguridad para dar tiempo a la inicialización global del SDK de Firebase
+setTimeout(() => {
+    cargarAsignacionesDesdeFirebase();
+}, 1500);
