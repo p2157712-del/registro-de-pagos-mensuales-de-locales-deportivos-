@@ -134,9 +134,5 @@ mostrarAsignaciones();
 window.eliminarAsignacion = eliminarAsignacion;
 window.editarAsignacion = editarAsignacion;
 
-// Retardo de seguridad para dar tiempo a la inicialización global del SDK de Firebase
-setTimeout(() => {
-    cargarAsignacionesDesdeFirebase();
-}, 1500);
 
 
