@@ -1,5 +1,7 @@
  let dbPagos = JSON.parse(localStorage.getItem('apex_pagos')) || [];
         let dbAtletas = JSON.parse(localStorage.getItem('apex_atletas')) || [];
+// Identifica  al administrador conectado 
+const usuarioActivo = localStorage.getItem('apex_admin') || "Invitado";
 
         function actualizarPagoAtletasSelector() {
             const sel = document.getElementById('select-atleta-pago');
@@ -49,7 +51,9 @@
                 return;
             }
 
-            const record = { id: editId ? parseInt(editId) : Date.now(), monto, metodo, fecha, atletaId: parseInt(atletaId), deportes };
+         //  IDENTIFICADOR 
+const record = { id: editId ? parseInt(editId) : Date.now(), monto, metodo, fecha, atletaId: parseInt(atletaId), deportes, usuarioOwner: usuarioActivo };
+
             if(editId) {
                 dbPagos = dbPagos.map(i => i.id === record.id ? record : i);
                 document.getElementById('pago-id-hidden').value = "";
@@ -184,3 +188,36 @@
 
         actualizarPagoAtletasSelector();
         mostrarPagos();
+ //  Recuperar transacciones en un dispositivo nuevo 
+async function cargarPagosDesdeFirebase() {
+    if (!window.firebaseQuery || usuarioActivo === "Invitado") return;
+    
+    try {
+        console.log("Buscando historial de pagos en la nube para:", usuarioActivo);
+        const q = window.firebaseQuery(
+            window.firebaseCollection(window.firebaseDB, "pagos"),
+            window.firebaseWhere("usuarioOwner", "==", usuarioActivo)
+        );
+        
+        const querySnapshot = await window.firebaseGetDocs(q);
+        const pagosNube = [];
+        
+        querySnapshot.forEach((doc) => {
+            pagosNube.push(doc.data());
+        });
+
+        if (pagosNube.length > 0) {
+            dbPagos = pagosNube;
+            localStorage.setItem('apex_pagos', JSON.stringify(dbPagos));
+            mostrarPagos();
+            console.log("✅ Pagos históricos del dispositivo anterior recuperados.");
+        }
+    } catch (error) {
+        console.error("❌ Error al descargar transacciones desde Firebase:", error);
+    }
+}
+
+// Retardo estratégico de 1.5 segundos para la sincronización inicial de la red
+setTimeout(() => {
+    cargarPagosDesdeFirebase();
+}, 1500);
