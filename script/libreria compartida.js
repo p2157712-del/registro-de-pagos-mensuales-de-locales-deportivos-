@@ -84,3 +84,54 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 });
+// ====== CÓDIGO AUMENTADO: CONTROL DE NOMBRES Y RESOLUCIÓN DE TABLAS PRIVADAS ======
+const user = localStorage.getItem('apex_admin');
+if (!user) { 
+    window.location.href = "index.html"; 
+} else {
+    const elementNombre = document.getElementById('admin-name');
+    const elementIniciales = document.getElementById('admin-initials');
+    
+    if (elementNombre) elementNombre.textContent = user;
+    if (elementIniciales) {
+        elementIniciales.textContent = user.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+    }
+}
+
+function logout() {
+    localStorage.removeItem('apex_admin');
+    window.location.href = "index.html";
+} 
+
+// Inicializamos tus variables globales en limpio
+let dbEntrenadores = [];
+let dbAsignaciones = [];
+let dbdeportes = [];
+let dbatletas = [];
+let dbpagos = [];
+
+// Función automática para esperar que Firebase traiga solo tus datos y refrescar la pantalla
+async function inicializarSincronizacionPrivada() {
+    try {
+        if (typeof getEntrenadores === "function") dbEntrenadores = await getEntrenadores();
+        if (typeof getAsignaciones === "function") dbAsignaciones = await getAsignaciones();
+        if (typeof getDeportes === "function") dbdeportes = await getDeportes();
+        if (typeof getAtletas === "function") dbatletas = await getAtletas();
+        if (typeof getPagos === "function") dbpagos = await getPagos();
+        
+        console.log("▲ Tablas locales cargadas exclusivamente para:", user);
+        
+        // Si las páginas tienen sus funciones de dibujar listas, las ejecutamos
+        if (typeof mostrarEntrenadores === "function") mostrarEntrenadores();
+        if (typeof mostrarAtletas === "function") mostrarAtletas();
+        if (typeof mostrarDeportes === "function") mostrarDeportes();
+        if (typeof mostrarPagos === "function") mostrarPagos();
+        if (typeof mostrarAsignaciones === "function") mostrarAsignaciones();
+        
+    } catch (error) {
+        console.error("Error al renderizar los datos privados del usuario:", error);
+    }
+}
+
+// Ejecutamos la sincronización de manera inmediata
+setTimeout(inicializarSincronizacionPrivada, 1000);
