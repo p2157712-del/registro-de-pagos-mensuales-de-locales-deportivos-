@@ -87,34 +87,8 @@ const usuarioActivo = localStorage.getItem('apex_admin') || "Invitado";
         }
 
         mostrarEntrenadores();
-        // ====== CÓDIGO AUMENTADO: Recuperar entrenadores en un dispositivo nuevo ======
-async function cargarEntrenadoresDesdeFirebase() {
-    if (!window.firebaseQuery || usuarioActivo === "Invitado") return;
-    
-    try {
-        console.log("Buscando entrenadores en la nube para:", usuarioActivo);
-        const q = window.firebaseQuery(
-            window.firebaseCollection(window.firebaseDB, "entrenadores"),
-            window.firebaseWhere("usuarioOwner", "==", usuarioActivo)
-        );
-        
-        const querySnapshot = await window.firebaseGetDocs(q);
-        const entrenadoresNube = [];
-        
-        querySnapshot.forEach((doc) => {
-            entrenadoresNube.push(doc.data());
-        });
+  
 
-        if (entrenadoresNube.length > 0) {
-            dbEntrenadores = entrenadoresNube;
-            localStorage.setItem('apex_entrenadores', JSON.stringify(dbEntrenadores));
-            mostrarEntrenadores();
-            console.log("✅ Entrenadores del dispositivo anterior recuperados con éxito.");
-        }
-    } catch (error) {
-        console.error("❌ Error al descargar entrenadores desde Firebase:", error);
-    }
-}
 // ====== CÓDIGO NUEVO: Mostrar el usuario conectado y sus iniciales ======
 function actualizarInterfazUsuario() {
     const txtNombre = document.getElementById('admin-name');
@@ -173,43 +147,4 @@ setTimeout(async () => {
     } catch (e) {
         console.error("Error en código aumentado:", e);
     }
-}, 2500); // Se ejecuta un momento después para asegurar que Firebase ya terminó de buscar
-// ====== CÓDIGO AUMENTADO: Corrección de compatibilidad para subida a Firebase ======
-async function forzarSincronizacionNube() {
-    if (!window.firebaseAddDoc || usuarioActivo === "Invitado") return;
-    
-    // Obtenemos los entrenadores locales instalados en la laptop
-    let locales = JSON.parse(localStorage.getItem('apex_entrenadores')) || [];
-    
-    for (let entrenador of locales) {
-        // Creamos una copia limpia libre de bloqueos de sistema para internet
-        const copiaLimpia = {
-            id: parseInt(entrenador.id),
-            nombre: String(entrenador.nombre).trim(),
-            apellido: String(entrenador.apellido).trim(),
-            telefono: String(entrenador.telefono).trim(),
-            descripcion: String(entrenador.descripcion).trim(),
-            usuarioOwner: String(usuarioActivo).trim() // Asegura que se guarde como texto puro
-        };
-
-        try {
-            // Enviamos el objeto purificado a la base de datos de Firebase
-            await window.firebaseAddDoc(
-                window.firebaseCollection(window.firebaseDB, "entrenadores"),
-                copiaLimpia
-            );
-            console.log("▲ Código Aumentado: Sincronización forzada con éxito para:", copiaLimpia.nombre);
-        } catch (error) {
-            console.error("Error en sincronización aumentada:", error);
-        }
-    }
-}
-
-// Vinculamos la purificación al botón de guardar para que funcione en tiempo real
-const botonGuardar = document.getElementById('btn-save-entrenador');
-if (botonGuardar) {
-    botonGuardar.addEventListener('click', () => {
-        // Se ejecuta un segundo después de presionar guardar para asegurar que local ya guardó
-        setTimeout(forzarSincronizacionNube, 1000);
-    });
-}
+}, 2500); 
