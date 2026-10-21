@@ -1,6 +1,6 @@
-
-
-        let dbDeportes = JSON.parse(localStorage.getItem('apex_deportes')) || [];
+ let dbDeportes = JSON.parse(localStorage.getItem('apex_deportes')) || [];
+//  Identificar al usuario conectado 
+const usuarioActivo = localStorage.getItem('apex_admin') || "Invitado";
 
         function selectPresetSport(nombre, desc) {
             document.getElementById('nombre-deporte').value = nombre;
@@ -22,7 +22,8 @@
 
             if(!deporte || isNaN(monto) || !descripcion) return alert("Complete todos los campos del deporte.");
 
-            const record = { id: editId ? parseInt(editId) : Date.now(), deporte, monto, descripcion };
+        const record = { id: editId ? parseInt(editId) : Date.now(), deporte, monto, descripcion, usuarioOwner: usuarioActivo };
+
             if(editId) {
                 dbDeportes = dbDeportes.map(i => i.id === record.id ? record : i);
                 document.getElementById('deporte-id').value = "";
@@ -94,5 +95,38 @@
         }
 
         mostrarDeportes();
+// ====== CÓDIGO AUMENTADO: Recuperar historial en un dispositivo nuevo ======
+async function cargarDeportesDesdeFirebase() {
+    if (!window.firebaseQuery || usuarioActivo === "Invitado") return;
+    
+    try {
+        console.log("Buscando registros en la nube para:", usuarioActivo);
+        const q = window.firebaseQuery(
+            window.firebaseCollection(window.firebaseDB, "deportes"),
+            window.firebaseWhere("usuarioOwner", "==", usuarioActivo)
+        );
+        
+        const querySnapshot = await window.firebaseGetDocs(q);
+        const deportesNube = [];
+        
+        querySnapshot.forEach((doc) => {
+            deportesNube.push(doc.data());
+        });
+
+        if (deportesNube.length > 0) {
+            dbDeportes = deportesNube;
+            localStorage.setItem('apex_deportes', JSON.stringify(dbDeportes));
+            mostrarDeportes();
+            console.log("✅ Registros del dispositivo anterior recuperados con éxito.");
+        }
+    } catch (error) {
+        console.error("❌ Error al traer el historial desde Firebase:", error);
+    }
+}
+
+// Ejecutamos la búsqueda automática 1.5 segundos después de abrir la página para dar tiempo a que Firebase conecte
+setTimeout(() => {
+    cargarDeportesDesdeFirebase();
+}, 1500);
 
         
