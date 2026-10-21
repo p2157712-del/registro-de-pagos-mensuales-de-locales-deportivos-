@@ -74,35 +74,40 @@
       document.getElementById('login-form').onsubmit = async (e) => {
     e.preventDefault();
     
-    // =========================================================================
-    // === CÓDIGO AUMENTADO: CONTROL DE ENTRADA ESTRICTO PARA UN SOLO USUARIO ===
-    const inputNombreVal = document.getElementById('admin-nombre').value.trim().toLowerCase();
-    const inputApellidoVal = document.getElementById('admin-apellido').value.trim().toLowerCase();
+  document.getElementById('login-form').onsubmit = async (e) => {
+    e.preventDefault();
     
-    // Aquí defines de forma estricta las únicas credenciales permitidas en este dispositivo
-    const USUARIO_VALIDO = "sq";
-    const APELLIDO_VALIDO = "sqqs";
-    
-    if (inputNombreVal !== USUARIO_VALIDO || inputApellidoVal !== APELLIDO_VALIDO) {
-        alert("❌ Acceso Denegado: Este dispositivo está protegido. No tienes permisos para registrar o ingresar un usuario diferente.");
-        
-        // Limpiamos los inputs para obligarlo a reintentar
-        document.getElementById('admin-nombre').value = "";
-        document.getElementById('admin-apellido').value = "";
-        return; // Detiene el código por completo y NO lo deja pasar a Firebase ni a deportes.html
-    }
-    // === FIN DEL CÓDIGO AUMENTADO ============================================
     // =========================================================================
+    // === CÓDIGO AUMENTADO: CANDADO LOCAL INDEPENDIENTE POR DISPOSITIVO ======
+    const inputNombreVal = document.getElementById('admin-nombre').value.trim();
+    const inputApellidoVal = document.getElementById('admin-apellido').value.trim();
+    const nombreCompletoIngresado = `${inputNombreVal} ${inputApellidoVal}`.trim();
 
-    // AQUÍ CONTINÚA TU CÓDIGO ORIGINAL SIN BORRAR NADA:
+    // Revisa el dueño asignado ÚNICAMENTE a este dispositivo físico
+    const usuarioDuenoDelDispositivo = localStorage.getItem('apex_dispositivo_dueno');
+
+    if (!usuarioDuenoDelDispositivo) {
+        // Si el aparato está limpio, el nombre que pongas ahorita se vuelve el dueño EXCLUSIVO de este dispositivo
+        localStorage.setItem('apex_dispositivo_dueno', nombreCompletoIngresado);
+        console.log("▲ Este dispositivo ha sido asignado permanentemente a:", nombreCompletoIngresado);
+    } else {
+        // Si ya hay un dueño en este aparato e intentan meter otro nombre, lo rebota de inmediato
+        if (nombreCompletoIngresado.toLowerCase() !== usuarioDuenoDelDispositivo.toLowerCase()) {
+            alert(`❌ Acceso Denegado: Este dispositivo está enlazado a otro usuario. No se permite el ingreso de un nombre diferente en este aparato.`);
+            document.getElementById('admin-nombre').value = "";
+            document.getElementById('admin-apellido').value = "";
+            return; // Frena el código por completo
+        }
+    }
+  :
     const nom = document.getElementById('admin-nombre').value.trim();
     const ape = document.getElementById('admin-apellido').value.trim();
     
     if (nom && ape) {
         const fullName = `${nom} ${ape}`;
         localStorage.setItem('apex_admin', fullName);
-        // ... (el resto de tu código de Firebase sigue igual aquí abajo)
-     
+        // ... (Tu código de Firebase continúa igual de aquí para abajo)
+
 </script>
 
     
