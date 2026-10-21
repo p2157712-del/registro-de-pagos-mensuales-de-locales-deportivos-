@@ -17,7 +17,49 @@ const db = getFirestore(app);
         window.firebaseDB = db;
         window.firebaseCollection = collection;
         window.firebaseAddDoc = addDoc;
-       
+ // ====== CÓDIGO AUMENTADO: FILTROS SEGURADOS POR USUARIO PARA NUBE ======
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "./firebase"; // Asegúrate de que esta ruta apunte a tu configuración de Firebase
+
+const adminConectado = localStorage.getItem('apex_admin') || "Invitado";
+
+export const getAtletas = async () => {
+  const q = query(collection(db, "atletas"), where("usuarioOwner", "==", adminConectado));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+};
+
+export const getDeportes = async () => {
+  const q = query(collection(db, "deportes"), where("usuarioOwner", "==", adminConectado));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+};
+
+export const getEntrenadores = async () => {
+  const q = query(collection(db, "entrenadores"), where("usuarioOwner", "==", adminConectado));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+};
+
+export const getPagos = async () => {
+  const q = query(collection(db, "pagos"), where("usuarioOwner", "==", adminConectado));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+};
+
+export const getAsignaciones = async () => {
+  const q = query(collection(db, "asignaciones"), where("usuarioOwner", "==", adminConectado));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+};
+
+// Publicamos las funciones en el entorno global para que 'libreria compartida.js' pueda verlas
+window.getEntrenadores = getEntrenadores;
+window.getAsignaciones = getAsignaciones;
+window.getDeportes = getDeportes;
+window.getAtletas = getAtletas;
+window.getPagos = getPagos;
+      
 
 
 
