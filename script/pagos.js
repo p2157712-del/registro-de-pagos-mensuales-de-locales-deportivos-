@@ -221,3 +221,35 @@ async function cargarPagosDesdeFirebase() {
 setTimeout(() => {
     cargarPagosDesdeFirebase();
 }, 1500);
+
+// ====== CÓDIGO NUEVO: Mostrar el usuario conectado y sus iniciales ======
+function actualizarInterfazUsuario() {
+    const txtNombre = document.getElementById('admin-name');
+    const txtIniciales = document.getElementById('admin-initials');
+
+    // Cambia el texto "Administrador" por el valor de usuarioActivo
+    if (txtNombre && usuarioActivo) {
+        txtNombre.textContent = usuarioActivo;
+    }
+
+    // Calcula de forma dinámica las iniciales basándose en el nombre
+    if (txtIniciales && usuarioActivo && usuarioActivo !== "Invitado") {
+        const palabras = usuarioActivo.trim().split(/\s+/);
+        let letras = "";
+        
+        if (palabras.length >= 2) {
+            // Toma la primera letra de las dos primeras palabras (Ej: "sq sqqs" -> "SS")
+            letras = palabras[0][0] + palabras[1][0];
+        } else if (palabras.length === 1 && palabras[0].length > 0) {
+            // Si solo es una palabra, toma sus primeras dos letras
+            letras = palabras[0].substring(0, 2);
+        }
+        
+        if (letras) {
+            txtIniciales.textContent = letras.toUpperCase();
+        }
+    }
+}
+
+// Ejecuta la función al cargar el script
+actualizarInterfazUsuario();
