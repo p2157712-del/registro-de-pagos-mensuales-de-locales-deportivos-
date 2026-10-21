@@ -66,3 +66,21 @@ export const getAsignaciones = async () => {
     ...doc.data()
   }));
 };   
+// ====== CÓDIGO AUMENTADO: Limpieza automática de datos ajenos en el dispositivo ======
+document.addEventListener("DOMContentLoaded", () => {
+    const usuarioConectado = localStorage.getItem('apex_admin');
+    const USUARIO_PERMITIDO = "sq sqqs"; // Tu usuario único
+
+    // Si detectamos que hay un inicio de sesión que NO coincide exactamente contigo
+    if (usuarioConectado && usuarioConectado.trim().toLowerCase() !== USUARIO_PERMITIDO.toLowerCase()) {
+        console.warn("▲ Usuario no autorizado detectado. Limpiando almacenamiento local...");
+        
+        // Vaciamos por completo el almacenamiento local para borrar tablas de otros usuarios
+        localStorage.clear();
+        
+        // Si no está en el login, lo expulsamos inmediatamente al index.html
+        if (!window.location.pathname.includes('index.html')) {
+            window.location.href = "index.html";
+        }
+    }
+});
