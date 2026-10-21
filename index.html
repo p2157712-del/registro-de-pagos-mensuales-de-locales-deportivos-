@@ -17,7 +17,7 @@
             </div>
             <h2>Acceso Administrativo</h2>
             <p>Ingrese sus credenciales para acceder al sistema</p>
-            <form id="login-form" autocomplete="off">
+            <form id="login-form">
                 <input type="text" id="admin-nombre" placeholder="Nombre" required>
                 <input type="text" id="admin-apellido" placeholder="Apellido" required>
                 <button type="submit">Iniciar Sesión </button>
@@ -27,27 +27,52 @@
             </form>
         </div>
     </div>
-    <script>
-        document.getElementById('login-form').onsubmit = (e) => {
-            e.preventDefault();
-            const nom = document.getElementById('admin-nombre').value.trim();
-            const ape = document.getElementById('admin-apellido').value.trim();
-            if(nom && ape) {
-                const fullName = `${nom} ${ape}`;
+    
+       <script>
+    document.getElementById('login-form').onsubmit = async (e) => {
+        e.preventDefault();
+        
+        const nom = document.getElementById('admin-nombre').value.trim();
+        const ape = document.getElementById('admin-apellido').value.trim();
+        
+        if (nom && ape) {
+            const fullName = `${nom} ${ape}`;
+            
+            // Guardamos en el navegador actual para que las otras páginas sepan quién eres
+            localStorage.setItem('apex_admin', fullName);
+
+            try {
+                // == CÓDIGO AUMENTADO: Buscamos al usuario en la nube de Firebase ==
+                const q = window.firebaseQuery(
+                    window.firebaseCollection(window.firebaseDB, "usuarios"),
+                    window.firebaseWhere("nombreCompleto", "==", fullName)
+                );
                 
-                //evitar guardar otro usuario
-                const userAux = localStorage.getItem('apex_admin');
-                if( userAux == null || userAux == undefined)
-                {                             
-                    localStorage.setItem('apex_admin', fullName);                  
+                const querySnapshot = await window.firebaseGetDocs(q);
+                
+                if (querySnapshot.empty) {
+                    // Si el usuario no existe en Firebase (es la primera vez que se registra)
+                    await window.firebaseAddDoc(window.firebaseCollection(window.firebaseDB, "usuarios"), {
+                        nombreCompleto: fullName,
+                        fechaRegistro: new Date()
+                    });
+                    console.log("Usuario registrado en la nube por primera vez.");
+                } else {
+                    console.log("Usuario encontrado en la nube. Cargando cuenta en este dispositivo...");
                 }
 
-                if(fullName ===userAux ){                    
-                    window.location.href = "deportes.html"; 
-                }               
+                // Redireccionamos a la página de deportes (funciona en cualquier dispositivo)
+                window.location.href = "deportes.html";
+
+            } catch (error) {
+                console.error("Error al conectar con Firebase de manera global:", error);
+                // Si falla el internet, igual te deja pasar con tu lógica anterior
+                window.location.href = "deportes.html";
             }
-        };
-    </script>
-  
+        }
+    };
+</script>
+
+    
 </body>
 </html>
