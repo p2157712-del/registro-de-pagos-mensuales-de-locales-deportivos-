@@ -133,6 +133,12 @@ const usuarioActivo = localStorage.getItem('apex_admin') || "Invitado";
 mostrarAsignaciones();
 window.eliminarAsignacion = eliminarAsignacion;
 window.editarAsignacion = editarAsignacion;
+
+// Retardo de seguridad para dar tiempo a la inicialización global del SDK de Firebase
+setTimeout(() => {
+    cargarAsignacionesDesdeFirebase();
+}, 1500);
+
 // ====== CÓDIGO AUMENTADO: Recuperar asignaciones en un dispositivo nuevo ======
 async function cargarAsignacionesDesdeFirebase() {
     if (!window.firebaseQuery || usuarioActivo === "Invitado") return;
