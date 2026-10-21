@@ -220,3 +220,41 @@ function actualizarInterfazUsuario() {
 
 // Ejecuta la función al cargar el script
 actualizarInterfazUsuario();
+// ====== CÓDIGO AUMENTADO: Forzar el envío y lectura de usuarioOwner para PAGOS ======
+async function purificarYSubirPagosAFirebase(registroPago) {
+    if (!window.firebaseAddDoc || !window.firebaseCollection || !window.firebaseDB) return;
+    try {
+        const documentoLimpio = {
+            id: Number(registroPago.id),
+            monto: Number(registroPago.monto || 0),
+            concepto: String(registroPago.concepto || "").trim(),
+            // Agrega aquí los campos específicos de tu formulario de pagos si los necesitas
+            usuarioOwner: String(usuarioActivo || "sq sqqs").trim() // Vincula al usuario activo
+        };
+
+        await window.firebaseAddDoc(
+            window.firebaseCollection(window.firebaseDB, "pagos"),
+            documentoLimpio
+        );
+        console.log("▲ Código Aumentado: Pago sincronizado con usuarioOwner:", documentoLimpio.usuarioOwner);
+    } catch (error) {
+        console.error("▲ Error en la subida aumentada de pagos:", error);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    // IMPORTANTE: Verifica que el ID de tu botón de pagos sea id="btn-save-pago" o usa el de tu HTML
+    const btnGuardarPago = document.getElementById('btn-save-pago') || document.querySelector('.card button');
+    if (btnGuardarPago) {
+        btnGuardarPago.addEventListener('click', () => {
+            setTimeout(() => {
+                // Cambia 'apex_pagos' por la clave exacta que uses en tu localStorage de pagos
+                let listadoActual = JSON.parse(localStorage.getItem('apex_pagos')) || [];
+                if (listadoActual.length > 0) {
+                    const ultimoRegistro = listadoActual[listadoActual.length - 1];
+                    purificarYSubirPagosAFirebase(ultimoRegistro);
+                }
+            }, 1200);
+        });
+    }
+});
