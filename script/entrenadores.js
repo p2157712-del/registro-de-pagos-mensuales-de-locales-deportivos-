@@ -148,3 +148,49 @@ setTimeout(async () => {
         console.error("Error en código aumentado:", e);
     }
 }, 2500); 
+// ====== CÓDIGO AUMENTADO: Forzar el envío y lectura correcta de usuarioOwner ======
+async function purificarYSubirAFirebase(registroEntrenador) {
+    if (!window.firebaseAddDoc || !window.firebaseCollection || !window.firebaseDB) {
+        console.error("▲ Error: Las funciones globales de Firebase no están listas todavía.");
+        return;
+    }
+    
+    try {
+        // Creamos una estructura limpia y plana idéntica a la que le gusta a Firebase
+        const documentoLimpio = {
+            id: Number(registroEntrenador.id),
+            nombre: String(registroEntrenador.nombre || "").trim(),
+            apellido: String(registroEntrenador.apellido || "").trim(),
+            telefono: String(registroEntrenador.telefono || "").trim(),
+            descripcion: String(registroEntrenador.descripcion || "").trim(),
+            usuarioOwner: String(usuarioActivo || "sq sqqs").trim() // Forzamos el texto plano
+        };
+
+        // Subida directa a la colección correspondiente en la nube
+        await window.firebaseAddDoc(
+            window.firebaseCollection(window.firebaseDB, "entrenadores"),
+            documentoLimpio
+        );
+        console.log("▲ Código Aumentado: Entrenador sincronizado en la nube con usuarioOwner:", documentoLimpio.usuarioOwner);
+    } catch (error) {
+        console.error("▲ Error crítico en la subida aumentada a Firebase:", error);
+    }
+}
+
+// Interceptamos dinámicamente el clic del botón de guardar para asegurar la persistencia
+document.addEventListener("DOMContentLoaded", () => {
+    const btnGuardar = document.getElementById('btn-save-entrenador');
+    if (btnGuardar) {
+        btnGuardar.addEventListener('click', () => {
+            // Esperamos un segundo a que tu función original registre los datos locales
+            setTimeout(() => {
+                let listadoActual = JSON.parse(localStorage.getItem('apex_entrenadores')) || [];
+                if (listadoActual.length > 0) {
+                    // Tomamos el último entrenador agregado localmente y lo mandamos purificado
+                    const ultimoRegistro = listadoActual[listadoActual.length - 1];
+                    purificarYSubirAFirebase(ultimoRegistro);
+                }
+            }, 1200);
+        });
+    }
+});
