@@ -1,132 +1,122 @@
- let dbDeportes = JSON.parse(localStorage.getItem('apex_deportes')) || [];
-//  Identificar al usuario conectado 
+  
+
+        let dbEntrenadores = JSON.parse(localStorage.getItem('apex_entrenadores')) || [];
+//  Identifica al administrador conectado 
 const usuarioActivo = localStorage.getItem('apex_admin') || "Invitado";
 
-        function selectPresetSport(nombre, desc) {
-            document.getElementById('nombre-deporte').value = nombre;
-            document.getElementById('descripcion-deporte').value = desc;
-            document.querySelectorAll('.sport-card').forEach(c => c.classList.remove('selected'));
-            const map = { 'Fútbol': 'futbol', 'Básquet': 'basket', 'Natación': 'natacion', 'Gimnasio': 'gym' };
-            if(map[nombre]) document.getElementById(`card-${map[nombre]}`).classList.add('selected');
-        }
+        async function guardarEntrenador() {
+            const editId = document.getElementById('entrenador-id').value;
+            const nombre = document.getElementById('entrenador-nombre').value.trim();
+            const apellido = document.getElementById('entrenador-apellido').value.trim();
+            const telefono = document.getElementById('entrenador-telefono').value.trim();
+            const descripcion = document.getElementById('entrenador-descripcion').value.trim();
 
-        function handleManualSportInput() {
-            document.querySelectorAll('.sport-card').forEach(c => c.classList.remove('selected'));
-        }
+            if(!nombre || !apellido || !telefono || !descripcion) return alert("Complete todos los campos del entrenador.");
 
-        async function guardardeporte() {
-            const editId = document.getElementById('deporte-id').value;
-            const deporte = document.getElementById('nombre-deporte').value.trim();
-            const monto = parseFloat(document.getElementById('monto-deporte').value);
-            const descripcion = document.getElementById('descripcion-deporte').value.trim();
-
-            if(!deporte || isNaN(monto) || !descripcion) return alert("Complete todos los campos del deporte.");
-
-        const record = { id: editId ? parseInt(editId) : Date.now(), deporte, monto, descripcion, usuarioOwner: usuarioActivo };
+           // IDENTIFICADOR 
+            const record = { id: editId ? parseInt(editId) : Math.floor(1000 + Math.random() * 9000), nombre, apellido, telefono, descripcion, usuarioOwner: usuarioActivo };
 
             if(editId) {
-                dbDeportes = dbDeportes.map(i => i.id === record.id ? record : i);
-                document.getElementById('deporte-id').value = "";
-                document.getElementById('btn-save-deporte').textContent = "Guardar Deporte";
+                dbEntrenadores = dbEntrenadores.map(i => i.id === record.id ? record : i);
+                document.getElementById('entrenador-id').value = "";
+                document.getElementById('btn-save-entrenador').textContent = "Guardar Entrenador";
             } else {
-                dbDeportes.push(record);
+                dbEntrenadores.push(record);
             }
-
-            localStorage.setItem('apex_deportes', JSON.stringify(dbDeportes));
+            localStorage.setItem('apex_entrenadores', JSON.stringify(dbEntrenadores));
 
             try {
                 await window.firebaseAddDoc(
-                    window.firebaseCollection(window.firebaseDB, "deportes"),
+                    window.firebaseCollection(window.firebaseDB, "entrenadores"),
                     record
                 );
-                console.log("✅ Deporte guardado en Firebase");
+                console.log("✅ Entrenador guardado en Firebase");
             } catch (error) {
-                console.error("❌ Error al guardar deporte en Firebase:", error);
-                alert("El deporte se guardó en la página, pero NO en Firebase.");
+                console.error("❌ Error al guardar entrenador en Firebase:", error);
+                alert("El entrenador se guardó en la página, pero NO en Firebase.");
             }
 
-             limpiarformularioDeporte();
-            mostrarDeportes();
+             limpiarformularioEntrenador();
+            mostrarEntrenadores();
         }
 
-        function limpiarformularioDeporte() {
-            document.getElementById('deporte-id').value = "";
-            document.getElementById('nombre-deporte').value = "";
-            document.getElementById('monto-deporte').value = "";
-            document.getElementById('descripcion-deporte').value = "";
-            document.querySelectorAll('.sport-card').forEach(c => c.classList.remove('selected'));
+        function  limpiarformularioEntrenador() {
+            document.getElementById('entrenador-id').value = "";
+            document.getElementById('entrenador-nombre').value = "";
+            document.getElementById('entrenador-apellido').value = "";
+            document.getElementById('entrenador-telefono').value = "";
+            document.getElementById('entrenador-descripcion').value = "";
         }
 
-        function mostrarDeportes() {
-            const tbody = document.getElementById('table-deportes-body');
-            tbody.innerHTML = dbDeportes.length === 0 ? `<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Sin registros.</td></tr>` : '';
-            dbDeportes.forEach(item => {
+        function mostrarEntrenadores() {
+            const tbody = document.getElementById('table-entrenadores-body');
+            tbody.innerHTML = dbEntrenadores.length === 0 ? `<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">Sin registros.</td></tr>` : '';
+            dbEntrenadores.forEach(item => {
                 tbody.innerHTML += `
                     <tr>
-                        <td><strong>${item.deporte}</strong></td>
-                        <td style="color: var(--success); font-weight:700;">$${item.monto.toFixed(2)}</td>
+                        <td><strong>${item.nombre} ${item.apellido}</strong></td>
+                        <td>${item.telefono}</td>
                         <td>${item.descripcion}</td>
                         <td>
-                            <button class="btn-edit" onclick="editarDeporte(${item.id})"><i class="fas fa-edit"></i></button>
-                            <button class="btn-delete" onclick="eliminarDeporte(${item.id})"><i class="fas fa-trash"></i></button>
+                            <button class="btn-edit" onclick="editarEntrenador(${item.id})"><i class="fas fa-edit"></i></button>
+                            <button class="btn-delete" onclick="eliminarEntrenador(${item.id})"><i class="fas fa-trash"></i></button>
                         </td>
                     </tr>
                 `;
             });
         }
 
-        function editarDeporte(id) {
-            const item = dbDeportes.find(i => i.id === id);
+        function editarEntrenador(id) {
+            const item = dbEntrenadores.find(i => i.id === id);
             if(!item) return;
-            document.getElementById('deporte-id').value = item.id;
-            document.getElementById('nombre-deporte').value = item.deporte;
-            document.getElementById('monto-deporte').value = item.monto;
-            document.getElementById('descripcion-deporte').value = item.descripcion;
-            document.getElementById('btn-save-deporte').textContent = "Actualizar Deporte";
+            document.getElementById('entrenador-id').value = item.id;
+            document.getElementById('entrenador-nombre').value = item.nombre;
+            document.getElementById('entrenador-apellido').value = item.apellido;
+            document.getElementById('entrenador-telefono').value = item.telefono;
+            document.getElementById('entrenador-descripcion').value = item.descripcion;
+            document.getElementById('btn-save-entrenador').textContent = "Actualizar Entrenador";
             window.scrollTo(0, 0);
         }
 
-        function eliminarDeporte(id) {
-            if(confirm("¿Eliminar deporte?")) {
-                dbDeportes = dbDeportes.filter(i => i.id !== id);
-                localStorage.setItem('apex_deportes', JSON.stringify(dbDeportes));
-                mostrarDeportes();
+        function eliminarEntrenador(id) {
+            if(confirm("¿Eliminar entrenador?")) {
+                dbEntrenadores = dbEntrenadores.filter(i => i.id !== id);
+                localStorage.setItem('apex_entrenadores', JSON.stringify(dbEntrenadores));
+                mostrarEntrenadores();
             }
         }
 
-        mostrarDeportes();
-// ====== CÓDIGO AUMENTADO: Recuperar historial en un dispositivo nuevo ======
-async function cargarDeportesDesdeFirebase() {
+        mostrarEntrenadores();
+        // ====== CÓDIGO AUMENTADO: Recuperar entrenadores en un dispositivo nuevo ======
+async function cargarEntrenadoresDesdeFirebase() {
     if (!window.firebaseQuery || usuarioActivo === "Invitado") return;
     
     try {
-        console.log("Buscando registros en la nube para:", usuarioActivo);
+        console.log("Buscando entrenadores en la nube para:", usuarioActivo);
         const q = window.firebaseQuery(
-            window.firebaseCollection(window.firebaseDB, "deportes"),
+            window.firebaseCollection(window.firebaseDB, "entrenadores"),
             window.firebaseWhere("usuarioOwner", "==", usuarioActivo)
         );
         
         const querySnapshot = await window.firebaseGetDocs(q);
-        const deportesNube = [];
+        const entrenadoresNube = [];
         
         querySnapshot.forEach((doc) => {
-            deportesNube.push(doc.data());
+            entrenadoresNube.push(doc.data());
         });
 
-        if (deportesNube.length > 0) {
-            dbDeportes = deportesNube;
-            localStorage.setItem('apex_deportes', JSON.stringify(dbDeportes));
-            mostrarDeportes();
-            console.log("✅ Registros del dispositivo anterior recuperados con éxito.");
+        if (entrenadoresNube.length > 0) {
+            dbEntrenadores = entrenadoresNube;
+            localStorage.setItem('apex_entrenadores', JSON.stringify(dbEntrenadores));
+            mostrarEntrenadores();
+            console.log("✅ Entrenadores del dispositivo anterior recuperados con éxito.");
         }
     } catch (error) {
-        console.error("❌ Error al traer el historial desde Firebase:", error);
+        console.error("❌ Error al descargar entrenadores desde Firebase:", error);
     }
 }
 
-// Ejecutamos la búsqueda automática 1.5 segundos después de abrir la página para dar tiempo a que Firebase conecte
+// Retardo de 1.5 segundos para garantizar la inicialización global de Firebase
 setTimeout(() => {
-    cargarDeportesDesdeFirebase();
+    cargarEntrenadoresDesdeFirebase();
 }, 1500);
-
-        
