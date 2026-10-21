@@ -95,38 +95,3 @@ const usuarioActivo = localStorage.getItem('apex_admin') || "Invitado";
         }
 
         mostrarDeportes();
-// ====== CÓDIGO AUMENTADO: Recuperar historial en un dispositivo nuevo ======
-async function cargarDeportesDesdeFirebase() {
-    if (!window.firebaseQuery || usuarioActivo === "Invitado") return;
-    
-    try {
-        console.log("Buscando registros en la nube para:", usuarioActivo);
-        const q = window.firebaseQuery(
-            window.firebaseCollection(window.firebaseDB, "deportes"),
-            window.firebaseWhere("usuarioOwner", "==", usuarioActivo)
-        );
-        
-        const querySnapshot = await window.firebaseGetDocs(q);
-        const deportesNube = [];
-        
-        querySnapshot.forEach((doc) => {
-            deportesNube.push(doc.data());
-        });
-
-        if (deportesNube.length > 0) {
-            dbDeportes = deportesNube;
-            localStorage.setItem('apex_deportes', JSON.stringify(dbDeportes));
-            mostrarDeportes();
-            console.log("✅ Registros del dispositivo anterior recuperados con éxito.");
-        }
-    } catch (error) {
-        console.error("❌ Error al traer el historial desde Firebase:", error);
-    }
-}
-
-// Ejecutamos la búsqueda automática 1.5 segundos después de abrir la página para dar tiempo a que Firebase conecte
-setTimeout(() => {
-    cargarDeportesDesdeFirebase();
-}, 1500);
-
-        
