@@ -76,37 +76,6 @@
     
   document.getElementById('login-form').onsubmit = async (e) => {
     e.preventDefault();
-    
-    // =========================================================================
-    // === CÓDIGO AUMENTADO: CANDADO LOCAL INDEPENDIENTE POR DISPOSITIVO ======
-    const inputNombreVal = document.getElementById('admin-nombre').value.trim();
-    const inputApellidoVal = document.getElementById('admin-apellido').value.trim();
-    const nombreCompletoIngresado = `${inputNombreVal} ${inputApellidoVal}`.trim();
-
-    // Revisa el dueño asignado ÚNICAMENTE a este dispositivo físico
-    const usuarioDuenoDelDispositivo = localStorage.getItem('apex_dispositivo_dueno');
-
-    if (!usuarioDuenoDelDispositivo) {
-        // Si el aparato está limpio, el nombre que pongas ahorita se vuelve el dueño EXCLUSIVO de este dispositivo
-        localStorage.setItem('apex_dispositivo_dueno', nombreCompletoIngresado);
-        console.log("▲ Este dispositivo ha sido asignado permanentemente a:", nombreCompletoIngresado);
-    } else {
-        // Si ya hay un dueño en este aparato e intentan meter otro nombre, lo rebota de inmediato
-        if (nombreCompletoIngresado.toLowerCase() !== usuarioDuenoDelDispositivo.toLowerCase()) {
-            alert(`❌ Acceso Denegado: Este dispositivo está enlazado a otro usuario. No se permite el ingreso de un nombre diferente en este aparato.`);
-            document.getElementById('admin-nombre').value = "";
-            document.getElementById('admin-apellido').value = "";
-            return; // Frena el código por completo
-        }
-    }
-  :
-    const nom = document.getElementById('admin-nombre').value.trim();
-    const ape = document.getElementById('admin-apellido').value.trim();
-    
-    if (nom && ape) {
-        const fullName = `${nom} ${ape}`;
-        localStorage.setItem('apex_admin', fullName);
-        // ... (Tu código de Firebase continúa igual de aquí para abajo)
 
 </script>
 
