@@ -1,7 +1,9 @@
 
 
         let dbAtletas = JSON.parse(localStorage.getItem('apex_atletas')) || [];
-       
+       // Identificar al administrador conectado 
+      const usuarioActivo = localStorage.getItem('apex_admin') || "Invitado";
+
         
        
        
@@ -46,7 +48,9 @@
                 return;
             }
 
-            const record = { id: editId ? parseInt(editId) : Date.now(), cedula, nombre, apellido, telefono, deportes };
+            // ======  IDENTIFICADOR  ======
+const record = { id: editId ? parseInt(editId) : Date.now(), cedula, nombre, apellido, telefono, deportes, usuarioOwner: usuarioActivo };
+
             if(editId) {
                 dbAtletas = dbAtletas.map(i => i.id === record.id ? record : i);
                 document.getElementById('atleta-id-hidden').value = "";
@@ -129,3 +133,36 @@
 
         mostrarListadeDeportes();
         mostrarAtletas();
+        // ====== CÓDIGO AUMENTADO: Recuperar atletas en un dispositivo nuevo ======
+async function cargarAtletasDesdeFirebase() {
+    if (!window.firebaseQuery || usuarioActivo === "Invitado") return;
+    
+    try {
+        console.log("Buscando atletas en la nube para:", usuarioActivo);
+        const q = window.firebaseQuery(
+            window.firebaseCollection(window.firebaseDB, "atletas"),
+            window.firebaseWhere("usuarioOwner", "==", usuarioActivo)
+        );
+        
+        const querySnapshot = await window.firebaseGetDocs(q);
+        const atletasNube = [];
+        
+        querySnapshot.forEach((doc) => {
+            atletasNube.push(doc.data());
+        });
+
+        if (atletasNube.length > 0) {
+            dbAtletas = atletasNube;
+            localStorage.setItem('apex_atletas', JSON.stringify(dbAtletas));
+            mostrarAtletas();
+            console.log("✅ Atletas del dispositivo anterior recuperados con éxito.");
+        }
+    } catch (error) {
+        console.error("❌ Error al traer atletas desde Firebase:", error);
+    }
+}
+
+// Le damos 1.5 segundos a Firebase para conectarse de forma global antes de descargar los registros
+setTimeout(() => {
+    cargarAtletasDesdeFirebase();
+}, 1500);
