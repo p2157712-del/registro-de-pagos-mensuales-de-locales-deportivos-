@@ -1,5 +1,3 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 const firebaseConfig = {
             apiKey: "AIzaSyDh91TvqhSFgxRzFz1fsYhKpuyot5frpP0",
@@ -17,5 +15,9 @@ const db = getFirestore(app);
         window.firebaseDB = db;
         window.firebaseCollection = collection;
         window.firebaseAddDoc = addDoc;
+       
+import { getDocs, query, where } from "https://gstatic.com";
 
-
+window.firebaseGetDocs = getDocs;
+window.firebaseQuery = query;
+window.firebaseWhere = where;
