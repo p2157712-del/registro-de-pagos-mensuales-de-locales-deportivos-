@@ -133,6 +133,3 @@ const usuarioActivo = localStorage.getItem('apex_admin') || "Invitado";
 mostrarAsignaciones();
 window.eliminarAsignacion = eliminarAsignacion;
 window.editarAsignacion = editarAsignacion;
-
-
-
