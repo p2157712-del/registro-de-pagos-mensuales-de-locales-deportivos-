@@ -7,7 +7,7 @@
     <title>Deportes | Nexus Pro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="css/styles.css">
     
 </head>
 <body>
@@ -26,11 +26,11 @@
 
             <div class="tabs">
                 
-                <a href="../deportes.html" class="tab-btn active"><i class="fas fa-futbol"></i> Deportes</a>
-                <a href="../entrenadores.html" class="tab-btn"><i class="fas fa-user-tie"></i> Entrenadores</a>
-                <a href="../asignaciones.html" class="tab-btn"><i class="fas fa-link"></i> Asignaciones</a>
-                <a href="../atletas.html" class="tab-btn"><i class="fas fa-users"></i> Atletas</a>
-                <a href="../pagos.html" class="tab-btn"><i class="fas fa-cash-register"></i> Pagos</a>
+                <a href="deportes.html" class="tab-btn active"><i class="fas fa-futbol"></i> Deportes</a>
+                <a href="entrenadores.html" class="tab-btn"><i class="fas fa-user-tie"></i> Entrenadores</a>
+                <a href="asignaciones.html" class="tab-btn"><i class="fas fa-link"></i> Asignaciones</a>
+                <a href="atletas.html" class="tab-btn"><i class="fas fa-users"></i> Atletas</a>
+                <a href="pagos.html" class="tab-btn"><i class="fas fa-cash-register"></i> Pagos</a>
             </div>
 
             <div class="card">
@@ -91,37 +91,7 @@
  <script src="script/libreria compartida.js"></script> 
  <script type="module" src="../script/db.js"></script>
  <script src= "script/deportes.js"></script>
-   <script>
-    // ====== CÓDIGO AUMENTADO PARA RECONOCER AL USUARIO EN CUALQUIER DISPOSITIVO ======
-    document.addEventListener("DOMContentLoaded", () => {
-        // Obtenemos el nombre del usuario que guardamos al iniciar sesión en el index.html
-        const usuarioActivo = localStorage.getItem('apex_admin');
-        
-        if (usuarioActivo) {
-            // Reemplaza el texto genérico "Administrador" por tu Nombre y Apellido reales
-            const nameElement = document.getElementById('admin-name');
-            if (nameElement) {
-                nameElement.innerText = usuarioActivo;
-            }
-            
-            // Genera las iniciales automáticas basadas en tu nombre y apellido (Ej: Juan Pérez -> JP)
-            const initialsElement = document.getElementById('admin-initials');
-            if (initialsElement) {
-                const partes = usuarioActivo.split(" ");
-                const iniciales = partes.map(p => p.charAt(0).toUpperCase()).slice(0, 2).join("");
-                initialsElement.innerText = iniciales;
-            }
-        } else {
-            // Si alguien intenta entrar directamente sin poner su nombre, lo regresa al login
-            window.location.href = "index.html";
-        }
-    });
 
-    // Función segura para cerrar sesión eliminando la llave del navegador actual
-    function logout() {
-        localStorage.removeItem('apex_admin');
-        window.location.href = "index.html";
-    }
- </script>
+ 
 
 </html>
