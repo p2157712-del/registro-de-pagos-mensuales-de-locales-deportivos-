@@ -13,12 +13,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-        window.firebaseDB = db;
-        window.firebaseCollection = collection;
-        window.firebaseAddDoc = addDoc;
-       
+
 import { collection, addDoc, getDocs, query, where } from "https://gstatic.com";
 
+window.firebaseDB = db;
+window.firebaseCollection = collection;
+window.firebaseAddDoc = addDoc;
 window.firebaseGetDocs = getDocs;
 window.firebaseQuery = query;
 window.firebaseWhere = where;
+
