@@ -10,12 +10,7 @@ const user = localStorage.getItem('apex_admin');
             window.location.href = "../index.html";
         } 
 
-             let dbEntrenadores = getEntrenadores() || [];
-             let dbAsignaciones = getAsignaciones() || [];
-             let dbdeportes = getDeportes() || [];
-             let dbatletas = getAtletas() || [];
-             let dbpagos = getPagos() || [];
-
+           
             // let dbAsignaciones = JSON.parse(localStorage.getItem('apex_asignaciones')) || [];
 
      
