@@ -17,7 +17,7 @@ const db = getFirestore(app);
         window.firebaseCollection = collection;
         window.firebaseAddDoc = addDoc;
        
-import { getDocs, query, where } from "https://gstatic.com";
+import { collection, addDoc, getDocs, query, where } from "https://gstatic.com";
 
 window.firebaseGetDocs = getDocs;
 window.firebaseQuery = query;
