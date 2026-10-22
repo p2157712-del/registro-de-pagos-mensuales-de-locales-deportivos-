@@ -126,28 +126,7 @@ actualizarInterfazUsuario();
 setTimeout(() => {
     cargarEntrenadoresDesdeFirebase();
 }, 1500);
-// ====== CÓDIGO AUMENTADO: Forzar la limpieza de datos basura locales si la nube está vacía ======
-setTimeout(async () => {
-    if (!window.firebaseQuery || usuarioActivo === "Invitado") return;
-    try {
-        const q = window.firebaseQuery(
-            window.firebaseCollection(window.firebaseDB, "entrenadores"),
-            window.firebaseWhere("usuarioOwner", "==", usuarioActivo)
-        );
-        const querySnapshot = await window.firebaseGetDocs(q);
-        
-        // Si el usuario está conectado en el dispositivo nuevo pero no tiene nada en la nube,
-        // vaciamos el localStorage local para borrar los datos basura o viejos de otros usuarios
-        if (querySnapshot.empty) {
-            dbEntrenadores = [];
-            localStorage.setItem('apex_entrenadores', JSON.stringify(dbEntrenadores));
-            mostrarEntrenadores();
-            console.log("▲ Código Aumentado: Se limpió la tabla local porque este usuario no tiene registros en la nube.");
-        }
-    } catch (e) {
-        console.error("Error en código aumentado:", e);
-    }
-}, 2500); 
+
 // ====== CÓDIGO AUMENTADO: Forzar el envío y lectura correcta de usuarioOwner ======
 async function purificarYSubirAFirebase(registroEntrenador) {
     if (!window.firebaseAddDoc || !window.firebaseCollection || !window.firebaseDB) {
