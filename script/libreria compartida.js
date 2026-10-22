@@ -1,15 +1,5 @@
 
-if (!localStorage.getItem('apex_admin')) {
-    window.location.href = "index.html";
-}
 
-
-function logout() {
-    localStorage.removeItem('apex_admin');
-    window.location.href = "index.html";
-}
-
-window.logout = logout;
 
 
 const user = localStorage.getItem('apex_admin');
